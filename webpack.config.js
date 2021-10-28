@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
-    entry: './js/index.ts',
+    entry: './ts/index.ts',
     devServer: {
       static: {
         directory: path.join(__dirname, 'dist'),
