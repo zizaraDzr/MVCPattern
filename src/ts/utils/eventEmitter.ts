@@ -3,22 +3,20 @@ export class EventEmitter {
      constructor() {
          this.events = {
             'add': [],
-            'remove': []
+            'remove': [],
+            'toggle': [],
+            'edit': []
          }
-
      }
      on(type: string, callback: Function) {
          this.events[type] = this.events[type] || []
          this.events[type].push(callback)
-         console.log(this.events)
      }
-
-     emit(type: string, arg: string) {
+     emit(type: string, arg: any) {
         if (this.events[type]) {
             this.events[type].forEach(element=> {
                 element(arg)
             });
         }
-        console.warn('нет типа события')
      }
 }

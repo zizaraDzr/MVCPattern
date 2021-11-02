@@ -1,8 +1,12 @@
 export function createElement (tagName: string, props: object, ...children: any) {
     const element = document.createElement(tagName)
-
+    
     Object.keys(props)
-        .forEach(item => element.setAttribute(item, props[item]))
+        .forEach(item =>{
+            if (props[item]) {  
+                element.setAttribute(item, props[item])
+            }
+        } )
 
         if (children.length) {
             children.forEach(child => {

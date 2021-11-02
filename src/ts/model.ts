@@ -2,7 +2,7 @@ import { State } from './interFace/state'
 type Id = number | string;
 class Model {
     state: State[]
-    constructor(state) {
+    constructor(state = []) {
         this.state = state;
     }
     getItem(id: Id) {
@@ -11,20 +11,19 @@ class Model {
 
     addItem(item: State) {
         this.state.push(item)
-        console.log(this.state);
         
         return item
     }
 
-    updateItem(id: Id, data) {
+    updateItem({ id, title, completed }: State) {
         const item = this.getItem(id)
-
-        Object.keys(data).forEach(prop =>item[prop]=data[prop])    
+        item.completed = completed
+        item.title = title
+        // Object.keys(data).forEach(prop =>item[prop]=data[prop])    
     }
 
     removeItem(id: Id) {
         this.state = this.state.filter(item =>  item.id != id)
-        console.log(this.state);
         
     }
 }

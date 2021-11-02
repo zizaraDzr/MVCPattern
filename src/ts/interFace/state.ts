@@ -1,5 +1,5 @@
 export interface State {
     id: number | string,
-    title: string,
-    completed: boolean
+    title?: string,
+    completed?: boolean
   }

@@ -34,24 +34,25 @@ class View extends EventEmitter {
         const listItem = event.target.parentNode as HTMLInputElement
         const id = listItem.getAttribute('data-id')
         const label = listItem.querySelector('.title') as HTMLInputElement
-        const input = listItem.querySelector('.textField') as HTMLInputElement
-        const editButton = listItem.querySelector('button-edit') as HTMLInputElement
+        const input = listItem.querySelector('.textfield') as HTMLInputElement
+        const editButton = listItem.querySelector('.edit') as HTMLInputElement
         const title = input.value
         const isEditing = listItem.classList.contains('editing')
 
         if (isEditing) {
-
+            this.emit('edit', { id, title })
+            
         } else {
             input.value = label.textContent
             editButton.textContent = 'Сохранить'
             listItem.classList.add('editing')
         }
     }
-    editItem(todo: State) {
+    editItem(todo: { id: string; title: string; }) {
         const listItem = this.findListItem(todo.id) as HTMLInputElement
         const label = listItem.querySelector('.title') as HTMLInputElement
-        const input = listItem.querySelector('.textField') as HTMLInputElement
-        const editButton = listItem.querySelector('button-edit') as HTMLInputElement
+        const input = listItem.querySelector('.textfield') as HTMLInputElement
+        const editButton = listItem.querySelector('.edit') as HTMLInputElement
  
         label.textContent = todo.title
         editButton.textContent = 'Изменить'
@@ -62,8 +63,6 @@ class View extends EventEmitter {
     handleRemove(event: { target: HTMLInputElement; }) {
         const listItem = event.target.parentNode as HTMLInputElement
         const id = listItem.getAttribute('data-id')
-        console.log(id);
-        
         
         this.emit('remove', id)
     }
@@ -73,6 +72,26 @@ class View extends EventEmitter {
         this.list.removeChild(listItem)
     }
 
+// toggle item
+    handleToggle(event: { target: HTMLInputElement; } ) {
+        const listItem = event.target.parentNode as HTMLInputElement
+        const id = listItem.getAttribute('data-id')
+        const completed: boolean = event.target.checked
+
+        this.emit('toggle', { id, completed } )
+    }
+    toggleItem(todo: any) {
+        
+        const listItem = this.findListItem(todo.id)
+        const checkbox = listItem.querySelector('.checkbox') as HTMLInputElement
+
+        checkbox.checked = todo.completed
+        if(todo.completed) {
+            listItem.classList.add('completed')
+        } else {
+            listItem.classList.remove('completed')
+        }
+    }
 
     createElement(todo: State) {
         const checkbox = createElement('input', {
@@ -80,7 +99,6 @@ class View extends EventEmitter {
             class: 'checkbox',
             checked: todo.completed ? 'checked' : '' 
         })
-    
         const label = createElement('label', { class: 'title' }, todo.title)
         const editInput = createElement('input', {
             type: 'text',
@@ -102,28 +120,9 @@ class View extends EventEmitter {
         removeButton.addEventListener('click', this.handleRemove.bind(this))
         return listItem
     }
-    handleToggle(event: { target: HTMLInputElement; } ) {
-       const listItem = event.target.parentNode as HTMLInputElement
-       const id = listItem.getAttribute('data-id')
-    //    const completed = event.target.completed as HTMLInputElement
-    }
     findListItem(id: Id): HTMLElement  {
-        
         return this.list.querySelector(`[data-id='${id}']`)
     }
-
-    toggleItem(todo: State) {
-        const listItem = this.findListItem(todo.id)
-        const checkbox = listItem.querySelector('.checkbox') as HTMLInputElement
-
-        checkbox.checked = todo.completed
-        if(todo.completed) {
-            listItem.classList.add('completed')
-        } else {
-            listItem.classList.remove('completed')
-        }
-    }
-
 }
 
 export default View
